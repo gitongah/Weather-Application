@@ -8,14 +8,13 @@ const displayCurrentDate = document.querySelector('#date')
 const displayTemp = document.querySelector('#current-temp');
 const displayHumid = document.querySelector('#current-humidity');
 const displayWind = document.querySelector('#current-wind-speed');
+const weatherFocastEl = document.querySelector('#weather-forecast');
+const countryEl =document.querySelector('#time-zone');
 
 const days = ['Sunday','Monday','Tuesday', 'Wednesday', 
 'Thursady', 'Friday', 'Saturday'];
 const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 
 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-
-
-
 
 setInterval(() => {
     const time = new Date();
@@ -39,10 +38,6 @@ const startSearch =() => {
     btnPrev.addEventListener('click', startSearch)
     
 }
-const secondSearch = () => {
-
-
-}
 
 btnSearch.addEventListener('click', startSearch)
 
@@ -61,24 +56,38 @@ const weatherApiCall =(city) => {
     }).then(function(data2){
         // console.log("--------- Second request with forecase --------")
         console.log(data2);
-        for(let i = 0; i < data2.list.length; i++){
-            console.log(data2.list[i].main.temp)
-            // const temp = document.createElement('p');
-            const humidity = document.createElement('p');
-            const wind = document.createElement('p');
-            const forecastDate = document.createElement('p');
-            forecastDate.textContent = `the date is ${data2.list[i].dt_txt}`;
-            displayTemp.textContent=`${data2.list[i].main.temp} `;
-            displayHumid.textContent=`${data2.list[i].main.humidity}%`;
-            displayWind.textContent=`${data2.list[i].wind.speed} MPH`;
-            // console.log(data2.list[i].main.humidity)
-            // console.log(data2.list[i].wind.speed)
-            // displayTemp.appendChild(temp);
+        countryEl.textContent = `${data2.city.country}`
 
-        }
+        displayTemp.textContent=`${data2.list[0].main.temp} `;
+        displayHumid.textContent=`${data2.list[0].main.humidity}%`;
+        displayWind.textContent=`${data2.list[0].wind.speed} MPH`;
+
+        // for(let i = 0; i < data2.list.length; i += 8){
+        //     console.log(data2.list[i].main.temp)
+        // }
+        
+        let otherDayForcast = '';
+    
+        data2.list.forEach((day,idx) =>{
+            if(idx == 0){
+
+            }else{
+                otherDayForcast +=`<div class="weather-forecast-item">
+        <div class="day">${dayjs(day.dt_txt).format('ddd')}</div>
+        <img src=" https://openweathermap.org/img/wn/${day.weather[0].icon}@2x.png" alt="weather icon" class="w-icon">
+        <div class="temp">Temp: ${day.main.temp}</div>
+        <div class="wind">Wind: ${day.wind.speed}</div>
+        <div class="humidity">Humidity: ${day.main.humidity}</div>
+      </div>`
+            }
+        })
+        weatherFocastEl.innerHTML =otherDayForcast;
+
+
     })
 
 })
+
 
 }
 
