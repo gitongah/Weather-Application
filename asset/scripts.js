@@ -68,10 +68,8 @@ const weatherApiCall =(city) => {
         
         let otherDayForcast = '';
     
-        data2.list.forEach((day,idx) =>{
-            if(idx == 0){
+        data2.list.forEach((day) =>{
 
-            }else{
                 otherDayForcast +=`<div class="weather-forecast-item">
         <div class="day">${dayjs(day.dt_txt).format('ddd')}</div>
         <img src=" https://openweathermap.org/img/wn/${day.weather[0].icon}@2x.png" alt="weather icon" class="w-icon">
@@ -79,7 +77,7 @@ const weatherApiCall =(city) => {
         <div class="wind">Wind: ${day.wind.speed}</div>
         <div class="humidity">Humidity: ${day.main.humidity}</div>
       </div>`
-            }
+            
         })
         weatherFocastEl.innerHTML =otherDayForcast;
 
